@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ judul_halaman }} - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="/audit" class="btn btn-ghost btn-sm mb-2">← Kembali</a>
+        <h2>{{ judul_halaman }}</h2>
+    </div>
+</div>
+<div class="card form-card">
+    <div class="card-body">
+        <form method="post" action="{% if audit %}/audit/{{ audit.id }}/edit{% else %}/audit/tambah{% endif %}" id="formAudit">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="nama" class="form-label">Nama Program Audit <span class="required">*</span></label>
+                    <input type="text" id="nama" name="nama" class="form-input" required
+                           value="{{ audit.nama if audit else '' }}" placeholder="Contoh: Audit Laporan Keuangan Q1 2025">
+                </div>
+                <div class="form-group">
+                    <label for="periode_mulai" class="form-label">Periode Mulai <span class="required">*</span></label>
+                    <input type="date" id="periode_mulai" name="periode_mulai" class="form-input" required
+                           value="{{ audit.periode_mulai if audit else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="periode_selesai" class="form-label">Periode Selesai <span class="required">*</span></label>
+                    <input type="date" id="periode_selesai" name="periode_selesai" class="form-input" required
+                           value="{{ audit.periode_selesai if audit else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="unit_kerja_id" class="form-label">Unit Kerja <span class="required">*</span></label>
+                    <select id="unit_kerja_id" name="unit_kerja_id" class="form-select" required>
+                        <option value="">-- Pilih Unit Kerja --</option>
+                        {% for u in unit_list %}
+                        <option value="{{ u.id }}" {% if audit and audit.unit_kerja_id == u.id %}selected{% endif %}>{{ u.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="auditor_id" class="form-label">Auditor <span class="required">*</span></label>
+                    <select id="auditor_id" name="auditor_id" class="form-select" required>
+                        <option value="">-- Pilih Auditor --</option>
+                        {% for a in auditor_list %}
+                        <option value="{{ a.id }}" {% if audit and audit.auditor_id == a.id %}selected{% endif %}>{{ a.nama }} ({{ a.jabatan }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" name="status" class="form-select">
+                        {% for s in ['Perencanaan', 'Pelaksanaan', 'Pelaporan', 'Selesai', 'Dibatalkan'] %}
+                        <option value="{{ s }}" {% if audit and audit.status == s %}selected{% elif not audit and s == 'Perencanaan' %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="tujuan" class="form-label">Tujuan Audit</label>
+                    <textarea id="tujuan" name="tujuan" class="form-textarea" rows="3" placeholder="Deskripsikan tujuan audit...">{{ audit.tujuan if audit else '' }}</textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a href="/audit" class="btn btn-ghost" id="btnBatalAudit">Batal</a>
+                <button type="submit" class="btn btn-primary" id="btnSimpanAudit">{{ 'Perbarui' if audit else 'Simpan' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

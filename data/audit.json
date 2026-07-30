@@ -1,0 +1,38 @@
+[
+  {
+    "id": "e3a84dfd-67b0-431a-aea5-9bc75c79a6e7",
+    "created_at": "2026-07-29T13:24:39.494934",
+    "updated_at": "2026-07-29T13:24:39.494940",
+    "nama": "Audit Laporan Keuangan Q1 2025",
+    "periode_mulai": "2025-01-01",
+    "periode_selesai": "2025-03-31",
+    "unit_kerja_id": "3c7ef456-9007-4f7b-927e-fd8109ac82b0",
+    "auditor_id": "2418bc9e-d57d-4089-aee0-9b2444e63e9d",
+    "tujuan": "Menilai kepatuhan laporan keuangan terhadap standar akuntansi",
+    "status": "Pelaksanaan"
+  },
+  {
+    "id": "b228ffb1-52b2-4701-8bc1-1390bc14c886",
+    "created_at": "2026-07-29T13:24:39.495136",
+    "updated_at": "2026-07-29T13:24:39.495142",
+    "nama": "Audit Proses Rekrutmen 2025",
+    "periode_mulai": "2025-02-01",
+    "periode_selesai": "2025-04-30",
+    "unit_kerja_id": "b006a950-d568-4005-87a2-d4c41696fce6",
+    "auditor_id": "d1209e7f-e124-41ef-8443-864568689cfe",
+    "tujuan": "Menilai kepatuhan proses rekrutmen terhadap SOP",
+    "status": "Pelaporan"
+  },
+  {
+    "id": "c7d38e87-0e5c-431f-ae7e-22570280b85b",
+    "created_at": "2026-07-29T13:24:39.495345",
+    "updated_at": "2026-07-29T13:24:39.495350",
+    "nama": "Audit Keamanan Sistem IT",
+    "periode_mulai": "2025-03-01",
+    "periode_selesai": "2025-05-31",
+    "unit_kerja_id": "9b63c353-c3c7-483f-87a9-b150e2f04109",
+    "auditor_id": "9a662b48-6d1f-41ba-8b2b-f6c3b6533cb0",
+    "tujuan": "Menilai penerapan kebijakan keamanan informasi",
+    "status": "Pelaksanaan"
+  }
+]

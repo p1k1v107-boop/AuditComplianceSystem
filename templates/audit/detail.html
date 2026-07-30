@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Detail Audit - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="/audit" class="btn btn-ghost btn-sm mb-2">← Kembali</a>
+        <h2>{{ audit.nama }}</h2>
+    </div>
+    <div class="action-group">
+        <a href="/audit/{{ audit.id }}/edit" class="btn btn-outline" id="btnEditDetailAudit">Edit</a>
+        <form method="post" action="/audit/{{ audit.id }}/hapus" onsubmit="return confirm('Hapus audit ini?')">
+            <button type="submit" class="btn btn-danger" id="btnHapusDetailAudit">Hapus</button>
+        </form>
+    </div>
+</div>
+<div class="two-col">
+    <div class="card">
+        <div class="card-header"><h3 class="card-title">Informasi Audit</h3></div>
+        <div class="card-body">
+            <dl class="detail-list">
+                <dt>Status</dt><dd><span class="badge badge-status-{{ audit.status|lower|replace(' ', '-') }}">{{ audit.status }}</span></dd>
+                <dt>Unit Kerja</dt><dd>{{ unit.nama if unit else '-' }}</dd>
+                <dt>Auditor</dt><dd>{{ auditor.nama if auditor else '-' }} {% if auditor %}<span class="text-muted">({{ auditor.jabatan }})</span>{% endif %}</dd>
+                <dt>Periode</dt><dd>{{ audit.periode_mulai }} s/d {{ audit.periode_selesai }}</dd>
+                <dt>Tujuan</dt><dd>{{ audit.tujuan or '-' }}</dd>
+                <dt>Dibuat</dt><dd class="text-muted">{{ audit.created_at[:10] }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header"><h3 class="card-title">Auditor</h3></div>
+        <div class="card-body">
+            {% if auditor %}
+            <dl class="detail-list">
+                <dt>Nama</dt><dd>{{ auditor.nama }}</dd>
+                <dt>Jabatan</dt><dd>{{ auditor.jabatan }}</dd>
+                <dt>Sertifikasi</dt><dd>{{ auditor.sertifikasi or '-' }}</dd>
+            </dl>
+            {% else %}
+            <div class="empty-state">Data auditor tidak ditemukan</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

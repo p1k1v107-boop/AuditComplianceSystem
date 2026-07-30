@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Sistem Audit Kepatuhan{% endblock %}
+{% block content %}
+<div class="dashboard-grid">
+    <!-- Stats Cards -->
+    <div class="stats-row">
+        <div class="stat-card stat-blue" id="statAudit">
+            <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+            </div>
+            <div class="stat-body">
+                <span class="stat-value">{{ stat_audit.total_audit }}</span>
+                <span class="stat-label">Program Audit</span>
+            </div>
+        </div>
+        <div class="stat-card stat-purple" id="statTemuan">
+            <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+            </div>
+            <div class="stat-body">
+                <span class="stat-value">{{ stat_temuan.total_temuan }}</span>
+                <span class="stat-label">Total Temuan</span>
+            </div>
+        </div>
+        <div class="stat-card stat-orange" id="statTerbuka">
+            <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+            </div>
+            <div class="stat-body">
+                <span class="stat-value">{{ stat_temuan.terbuka }}</span>
+                <span class="stat-label">Temuan Terbuka</span>
+            </div>
+        </div>
+        <div class="stat-card stat-red" id="statTerlambat">
+            <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+            </div>
+            <div class="stat-body">
+                <span class="stat-value">{{ stat_tl.terlambat }}</span>
+                <span class="stat-label">TL Terlambat</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Row -->
+    <div class="two-col">
+        <div class="card" id="cardDistribusiTemuan">
+            <div class="card-header">
+                <h2 class="card-title">Distribusi Temuan</h2>
+            </div>
+            <div class="card-body">
+                <div class="donut-chart-wrap">
+                    <div class="donut-chart" id="donutChart" data-minor="{{ stat_temuan.minor }}"
+                        data-mayor="{{ stat_temuan.mayor }}" data-kritis="{{ stat_temuan.kritis }}">
+                    </div>
+                    <div class="donut-legend">
+                        <div class="legend-item"><span class="dot dot-green"></span>Minor: {{ stat_temuan.minor }}</div>
+                        <div class="legend-item"><span class="dot dot-yellow"></span>Mayor: {{ stat_temuan.mayor }}
+                        </div>
+                        <div class="legend-item"><span class="dot dot-red"></span>Kritis: {{ stat_temuan.kritis }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="cardStatusTL">
+            <div class="card-header">
+                <h2 class="card-title">Status Tindak Lanjut</h2>
+            </div>
+            <div class="card-body">
+                {% set p_selesai = (stat_tl.selesai / stat_tl.total_tindak_lanjut * 100)|int if stat_tl.total_tindak_lanjut > 0 else 0 %}
+                {% set p_proses = (stat_tl.dalam_proses / stat_tl.total_tindak_lanjut * 100)|int if stat_tl.total_tindak_lanjut > 0 else 0 %}
+                {% set p_terlambat = (stat_tl.terlambat / stat_tl.total_tindak_lanjut * 100)|int if stat_tl.total_tindak_lanjut > 0 else 0 %}
+                <div class="bar-chart" id="barChart">
+                    <div class="bar-item">
+                        <span class="bar-label">Selesai</span>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-green" data-width="{{ p_selesai }}"></div>
+                        </div>
+                        <span class="bar-val">{{ stat_tl.selesai }}</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Proses</span>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-blue" data-width="{{ p_proses }}"></div>
+                        </div>
+                        <span class="bar-val">{{ stat_tl.dalam_proses }}</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Terlambat</span>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-red" data-width="{{ p_terlambat }}"></div>
+                        </div>
+                        <span class="bar-val">{{ stat_tl.terlambat }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables Row -->
+    <div class="two-col">
+        <div class="card" id="cardTemuanTerbuka">
+            <div class="card-header">
+                <h2 class="card-title">Temuan Terbuka Terbaru</h2>
+                <a href="/temuan?status=Terbuka" class="btn btn-sm btn-ghost">Lihat Semua</a>
+            </div>
+            <div class="card-body p0">
+                {% if temuan_terbuka %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Jenis</th>
+                            <th>Skor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in temuan_terbuka %}
+                        <tr>
+                            <td><a href="/temuan/{{ t.id }}" class="link">{{ t.judul[:40] }}{% if t.judul|length > 40
+                                    %}...{% endif %}</a></td>
+                            <td><span class="badge badge-{{ t.JENIS|lower }}">{{ t.JENIS }}</span></td>
+                            <td><span class="risk-score risk-{{ t.label_risiko()|lower|replace(' ', '-') }}">{{
+                                    t.hitung_skor_risiko() }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">Tidak ada temuan terbuka</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card" id="cardTerlambat">
+            <div class="card-header">
+                <h2 class="card-title">Tindak Lanjut Terlambat</h2>
+                <a href="/tindak-lanjut?status=Terlambat" class="btn btn-sm btn-ghost">Lihat Semua</a>
+            </div>
+            <div class="card-body p0">
+                {% if terlambat %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Deskripsi</th>
+                            <th>PJ</th>
+                            <th>Batas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tl in terlambat %}
+                        <tr>
+                            <td><a href="/tindak-lanjut/{{ tl.id }}" class="link">{{ tl.deskripsi[:35] }}{% if
+                                    tl.deskripsi|length > 35 %}...{% endif %}</a></td>
+                            <td>{{ tl.penanggung_jawab }}</td>
+                            <td><span class="text-danger">{{ tl.batas_waktu }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">Tidak ada tindak lanjut terlambat</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

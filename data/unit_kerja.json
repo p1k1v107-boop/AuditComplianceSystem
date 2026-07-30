@@ -1,0 +1,26 @@
+[
+  {
+    "id": "3c7ef456-9007-4f7b-927e-fd8109ac82b0",
+    "created_at": "2026-07-29T13:24:39.486063",
+    "updated_at": "2026-07-29T13:24:39.486081",
+    "nama": "Divisi Keuangan",
+    "kode": "DIV-KEU",
+    "kepala_unit": "Budi Santoso"
+  },
+  {
+    "id": "b006a950-d568-4005-87a2-d4c41696fce6",
+    "created_at": "2026-07-29T13:24:39.486382",
+    "updated_at": "2026-07-29T13:24:39.486391",
+    "nama": "Divisi SDM",
+    "kode": "DIV-SDM",
+    "kepala_unit": "Sari Dewi"
+  },
+  {
+    "id": "9b63c353-c3c7-483f-87a9-b150e2f04109",
+    "created_at": "2026-07-29T13:24:39.493618",
+    "updated_at": "2026-07-29T13:24:39.493636",
+    "nama": "Divisi IT",
+    "kode": "DIV-IT",
+    "kepala_unit": "Andi Wijaya"
+  }
+]

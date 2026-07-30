@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Detail Temuan - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="/temuan" class="btn btn-ghost btn-sm mb-2">← Kembali</a>
+        <div class="title-with-badge">
+            <h2>{{ temuan.judul }}</h2>
+            <span class="badge badge-{{ temuan.JENIS|lower }} badge-lg">{{ temuan.JENIS }}</span>
+        </div>
+    </div>
+    <div class="action-group">
+        <a href="/temuan/{{ temuan.id }}/edit" class="btn btn-outline" id="btnEditDetailTemuan">Edit</a>
+        <form method="post" action="/temuan/{{ temuan.id }}/hapus" onsubmit="return confirm('Hapus temuan ini?')">
+            <button type="submit" class="btn btn-danger" id="btnHapusDetailTemuan">Hapus</button>
+        </form>
+    </div>
+</div>
+
+<div class="two-col">
+    <div>
+        <!-- Info Temuan -->
+        <div class="card mb-4" id="cardInfoTemuan">
+            <div class="card-header"><h3 class="card-title">Informasi Temuan</h3></div>
+            <div class="card-body">
+                <dl class="detail-list">
+                    <dt>Status</dt>
+                    <dd><span class="badge badge-tl-{{ temuan.status_tindak_lanjut|lower|replace(' ', '-') }}">{{ temuan.status_tindak_lanjut }}</span></dd>
+                    <dt>Unit Kerja</dt><dd>{{ unit.nama if unit else '-' }}</dd>
+                    <dt>Dampak</dt><dd>{{ temuan.dampak }}/5</dd>
+                    <dt>Kemungkinan</dt><dd>{{ temuan.kemungkinan }}/5</dd>
+                    <dt>Tingkat Kepatuhan</dt><dd>{{ temuan.tingkat_kepatuhan }}%</dd>
+                    <dt>Batas Tindak Lanjut</dt><dd>{{ temuan.batas_tindak_lanjut or '-' }}</dd>
+                </dl>
+                <!-- Skor Risiko Visual -->
+                <div class="skor-box skor-box-{{ temuan.label_risiko()|lower|replace(' ', '-') }}">
+                    <div class="skor-box-val">{{ temuan.hitung_skor_risiko() }}</div>
+                    <div class="skor-box-label">Skor Risiko<br><strong>{{ temuan.label_risiko() }}</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deskripsi & Rekomendasi -->
+        <div class="card mb-4" id="cardDeskripsi">
+            <div class="card-header"><h3 class="card-title">Detail</h3></div>
+            <div class="card-body">
+                <p class="text-sm text-muted mb-1">Deskripsi</p>
+                <p class="mb-3">{{ temuan.deskripsi }}</p>
+                <p class="text-sm text-muted mb-1">Rekomendasi</p>
+                <p>{{ temuan.rekomendasi or '-' }}</p>
+            </div>
+        </div>
+
+        <!-- Ubah Status -->
+        {% if temuan.status_tindak_lanjut not in ['Ditutup', 'Dibatalkan'] %}
+        <div class="card mb-4" id="cardUbahStatus">
+            <div class="card-header"><h3 class="card-title">Ubah Status</h3></div>
+            <div class="card-body">
+                <form method="post" action="/temuan/{{ temuan.id }}/status" class="inline-form">
+                    <select name="status_baru" class="form-select form-select-sm" id="selectStatusTemuan">
+                        {% for s in ['Terbuka', 'Dalam Proses', 'Selesai', 'Dibatalkan'] %}
+                        {% if s != temuan.status_tindak_lanjut %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm" id="btnUbahStatusTemuan">Ubah Status</button>
+                </form>
+                <form method="post" action="/temuan/{{ temuan.id }}/tutup" class="mt-2">
+                    <button type="submit" class="btn btn-success btn-sm" id="btnTutupTemuan"
+                            onclick="return confirm('Tutup temuan ini? Memerlukan bukti yang cukup.')">
+                        Tutup Temuan
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <!-- Bukti Audit -->
+        <div class="card mb-4" id="cardBukti">
+            <div class="card-header">
+                <h3 class="card-title">Bukti Audit <span class="badge badge-count">{{ bukti_list|length }}/{{ temuan.minimum_bukti() }}</span></h3>
+            </div>
+            <div class="card-body p0">
+                {% if bukti_list %}
+                <div class="bukti-list">
+                    {% for b in bukti_list %}
+                    <div class="bukti-item">
+                        <div class="bukti-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                        </div>
+                        <div class="bukti-info">
+                            <span class="bukti-judul">{{ b.judul }}</span>
+                            <span class="bukti-tipe text-muted">{{ b.tipe }}</span>
+                        </div>
+                        <form method="post" action="/temuan/{{ temuan.id }}/bukti/{{ b.id }}/hapus">
+                            <button type="submit" class="btn btn-xs btn-ghost text-danger" id="btnHapusBukti{{ loop.index }}">×</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">Belum ada bukti</div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <details class="collapsible" id="detailsTambahBukti">
+                    <summary>+ Tambah Bukti</summary>
+                    <form method="post" action="/temuan/{{ temuan.id }}/bukti/tambah" class="form-inline-sm mt-2">
+                        <input type="text" name="judul" class="form-input form-input-sm" placeholder="Judul bukti" required>
+                        <select name="tipe" class="form-select form-select-sm">
+                            {% for t in ['Dokumen', 'Foto', 'Wawancara', 'Observasi', 'Data Elektronik'] %}
+                            <option value="{{ t }}">{{ t }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" name="deskripsi" class="form-input form-input-sm" placeholder="Deskripsi">
+                        <button type="submit" class="btn btn-primary btn-sm" id="btnSimpanBukti">Simpan</button>
+                    </form>
+                </details>
+            </div>
+        </div>
+
+        <!-- Tindak Lanjut -->
+        <div class="card" id="cardTindakLanjut">
+            <div class="card-header">
+                <h3 class="card-title">Tindak Lanjut</h3>
+                <a href="/tindak-lanjut/tambah" class="btn btn-sm btn-ghost">+ Tambah</a>
+            </div>
+            <div class="card-body p0">
+                {% if tl_list %}
+                <div class="tl-list">
+                    {% for tl in tl_list %}
+                    <div class="tl-item">
+                        <div class="tl-header">
+                            <span class="badge badge-tipe">{{ tl.tipe_tindakan }}</span>
+                            <span class="badge badge-tl-{{ tl.status|lower|replace(' ', '-') }}">{{ tl.status }}</span>
+                        </div>
+                        <p class="tl-deskripsi">{{ tl.deskripsi[:60] }}{% if tl.deskripsi|length > 60 %}...{% endif %}</p>
+                        <div class="tl-meta">
+                            <span class="text-muted">PJ: {{ tl.penanggung_jawab }}</span>
+                            <span class="text-muted">Batas: {{ tl.batas_waktu }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">Belum ada tindak lanjut</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

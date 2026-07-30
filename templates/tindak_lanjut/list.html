@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Tindak Lanjut - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><h2>Daftar Tindak Lanjut</h2><p class="text-muted">Pantau dan kelola semua tindak lanjut temuan</p></div>
+    <a href="/tindak-lanjut/tambah" class="btn btn-primary" id="btnTambahTL">+ Tambah</a>
+</div>
+<div class="filter-bar">
+    <a href="/tindak-lanjut" class="filter-chip {% if not filter_status %}active{% endif %}">Semua</a>
+    <a href="/tindak-lanjut?status=Belum Mulai" class="filter-chip {% if filter_status == 'Belum Mulai' %}active{% endif %}">Belum Mulai</a>
+    <a href="/tindak-lanjut?status=Dalam Proses" class="filter-chip {% if filter_status == 'Dalam Proses' %}active{% endif %}">Dalam Proses</a>
+    <a href="/tindak-lanjut?status=Selesai" class="filter-chip {% if filter_status == 'Selesai' %}active{% endif %}">Selesai</a>
+    <a href="/tindak-lanjut?status=Terlambat" class="filter-chip filter-chip-red {% if filter_status == 'Terlambat' %}active{% endif %}">Terlambat</a>
+</div>
+<div class="card">
+    <div class="card-body p0">
+        {% if tl_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tindakan</th>
+                    <th>Temuan</th>
+                    <th>Unit Kerja</th>
+                    <th>PJ</th>
+                    <th>Batas Waktu</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tl in tl_list %}
+                <tr>
+                    <td>
+                        <a href="/tindak-lanjut/{{ tl.id }}" class="link fw-medium">{{ tl.deskripsi[:40] }}{% if tl.deskripsi|length > 40 %}...{% endif %}</a>
+                        <span class="badge badge-tipe badge-sm">{{ tl.tipe_tindakan }}</span>
+                    </td>
+                    <td class="text-muted">{{ temuan_map.get(tl.temuan_id, '-')[:30] }}</td>
+                    <td class="text-muted">{{ unit_map.get(tl.unit_kerja_id, '-') }}</td>
+                    <td>{{ tl.penanggung_jawab }}</td>
+                    <td class="{% if tl.status not in ['Selesai','Dibatalkan'] %}text-danger{% else %}text-muted{% endif %}">{{ tl.batas_waktu }}</td>
+                    <td><span class="badge badge-tl-{{ tl.status|lower|replace(' ', '-') }}">{{ tl.status }}</span></td>
+                    <td>
+                        <div class="action-group">
+                            <a href="/tindak-lanjut/{{ tl.id }}" class="btn btn-xs btn-ghost" id="btnDetailTL{{ loop.index }}">Detail</a>
+                            <form method="post" action="/tindak-lanjut/{{ tl.id }}/hapus" onsubmit="return confirm('Hapus?')" style="display:inline">
+                                <button type="submit" class="btn btn-xs btn-danger" id="btnHapusTL{{ loop.index }}">Hapus</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            <p>Belum ada tindak lanjut. <a href="/tindak-lanjut/tambah" class="link">Tambah sekarang</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

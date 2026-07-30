@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}{{ judul_halaman }} - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><a href="/tindak-lanjut" class="btn btn-ghost btn-sm mb-2">← Kembali</a><h2>{{ judul_halaman }}</h2></div>
+</div>
+<div class="card form-card">
+    <div class="card-body">
+        <form method="post" action="/tindak-lanjut/tambah" id="formTL">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="temuan_id" class="form-label">Temuan <span class="required">*</span></label>
+                    <select id="temuan_id" name="temuan_id" class="form-select" required>
+                        <option value="">-- Pilih Temuan --</option>
+                        {% for t in temuan_list %}
+                        <option value="{{ t.id }}" {% if tl and tl.temuan_id == t.id %}selected{% endif %}>
+                            [{{ t.JENIS }}] {{ t.judul[:50] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="unit_kerja_id" class="form-label">Unit Kerja <span class="required">*</span></label>
+                    <select id="unit_kerja_id" name="unit_kerja_id" class="form-select" required>
+                        <option value="">-- Pilih Unit --</option>
+                        {% for u in unit_list %}
+                        <option value="{{ u.id }}" {% if tl and tl.unit_kerja_id == u.id %}selected{% endif %}>{{ u.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tipe_tindakan" class="form-label">Tipe Tindakan <span class="required">*</span></label>
+                    <select id="tipe_tindakan" name="tipe_tindakan" class="form-select" required>
+                        {% for tp in ['Koreksi', 'Pencegahan', 'Penutupan', 'Pembatalan'] %}
+                        <option value="{{ tp }}" {% if tl and tl.tipe_tindakan == tp %}selected{% endif %}>{{ tp }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="penanggung_jawab" class="form-label">Penanggung Jawab <span class="required">*</span></label>
+                    <input type="text" id="penanggung_jawab" name="penanggung_jawab" class="form-input" required
+                           value="{{ tl.penanggung_jawab if tl else '' }}" placeholder="Nama PJ">
+                </div>
+                <div class="form-group full-width">
+                    <label for="deskripsi" class="form-label">Deskripsi Tindakan <span class="required">*</span></label>
+                    <textarea id="deskripsi" name="deskripsi" class="form-textarea" rows="3" required
+                              placeholder="Uraikan tindakan yang akan dilakukan...">{{ tl.deskripsi if tl else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="batas_waktu" class="form-label">Batas Waktu <span class="required">*</span></label>
+                    <input type="date" id="batas_waktu" name="batas_waktu" class="form-input" required
+                           value="{{ tl.batas_waktu if tl else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="tanggal_pelaksanaan" class="form-label">Tanggal Pelaksanaan</label>
+                    <input type="date" id="tanggal_pelaksanaan" name="tanggal_pelaksanaan" class="form-input"
+                           value="{{ tl.tanggal_pelaksanaan if tl else '' }}">
+                </div>
+                <div class="form-group full-width">
+                    <label for="catatan" class="form-label">Catatan</label>
+                    <textarea id="catatan" name="catatan" class="form-textarea" rows="2"
+                              placeholder="Catatan tambahan...">{{ tl.catatan if tl else '' }}</textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a href="/tindak-lanjut" class="btn btn-ghost" id="btnBatalTL">Batal</a>
+                <button type="submit" class="btn btn-primary" id="btnSimpanTL">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
