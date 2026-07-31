@@ -1,6 +1,2 @@
 id,temuan_id,unit_kerja_id,tipe_tindakan,deskripsi,penanggung_jawab,batas_waktu,tanggal_pelaksanaan,status,catatan,riwayat,created_at,updated_at
-tl1,t1,u1,Koreksi,Test TL,A,2026-07-28,,Dalam Proses,,[],,
-7068003e-936d-414f-a561-73c7f7f44623,0ddd0eb9-9cb6-4435-a9a2-63f885c863eb,3c7ef456-9007-4f7b-927e-fd8109ac82b0,Koreksi,Membuat sistem pengingat otomatis untuk deadline laporan bulanan,Budi Santoso,2025-04-15,,Belum Mulai,Akan menggunakan fitur reminder di sistem ERP,[],2026-07-29T13:24:39.498454,2026-07-29T13:24:39.498460
-718dc62b-1e34-4182-97b8-cdfb808f38e5,ac340eaa-3384-424b-a63e-9c45271dca00,3c7ef456-9007-4f7b-927e-fd8109ac82b0,Koreksi,Melengkapi dokumen pendukung untuk 12 transaksi yang bermasalah,Budi Santoso,2025-05-10,,Belum Mulai,Koordinasi dengan vendor untuk mendapatkan invoice,[],2026-07-29T13:24:39.498652,2026-07-29T13:24:39.498668
-4d192901-f788-459f-95d6-dbdf256644c2,b61ea23d-4c2d-4c4c-bb99-52649263a026,9b63c353-c3c7-483f-87a9-b150e2f04109,Pencegahan,"Rotasi kredensial, aktifkan MFA, dan audit hak akses seluruh user sistem",Andi Wijaya,2025-04-01,,Belum Mulai,Prioritas tertinggi - segera eksekusi,[],2026-07-29T13:24:39.498853,2026-07-29T13:24:39.498868
-8c546526-0ab5-4dc0-a27b-1a9d689f81ed,ee29275a-221f-49fb-a54a-405b351291d5,9b63c353-c3c7-483f-87a9-b150e2f04109,Koreksi,Konfigurasi backup otomatis menggunakan cron job dan validasi setiap minggu,Andi Wijaya,2025-04-10,,Belum Mulai,Backup akan disimpan ke cloud storage,[],2026-07-29T13:24:39.499049,2026-07-29T13:24:39.499066
+tl1,t1,u1,Koreksi,Test TL,A,2026-07-30,,Dalam Proses,,[],,

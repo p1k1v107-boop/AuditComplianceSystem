@@ -11,7 +11,13 @@ app = FastAPI(
     version="1.0.0",
 )
 
+import os
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Mount folder uploads agar file bukti bisa diakses dari browser
+os.makedirs(os.path.join("data", "uploads"), exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=os.path.join("data", "uploads")), name="uploads")
 
 app.include_router(dashboard.router)
 app.include_router(audit_router.router)

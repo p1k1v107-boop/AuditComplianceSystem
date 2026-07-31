@@ -19,7 +19,7 @@
                 <dt>Tipe</dt><dd><span class="badge badge-tipe">{{ tl.tipe_tindakan }}</span></dd>
                 <dt>Temuan</dt><dd>{{ temuan.judul if temuan else '-' }}</dd>
                 <dt>Unit Kerja</dt><dd>{{ unit.nama if unit else '-' }}</dd>
-                <dt>PJ</dt><dd>{{ tl.penanggung_jawab }}</dd>
+                <dt>Penanggung Jawab</dt><dd>{{ tl.penanggung_jawab }}</dd>
                 <dt>Batas Waktu</dt><dd class="{% if tl.status not in ['Selesai','Dibatalkan'] %}text-danger{% endif %}">{{ tl.batas_waktu }}</dd>
                 <dt>Pelaksanaan</dt><dd>{{ tl.tanggal_pelaksanaan or '-' }}</dd>
                 <dt>Catatan</dt><dd>{{ tl.catatan or '-' }}</dd>

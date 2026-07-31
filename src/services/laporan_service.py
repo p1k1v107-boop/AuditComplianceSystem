@@ -66,10 +66,10 @@ class LaporanService:
                     f.write("Tidak ada tindak lanjut yang terlambat.\n")
                 for i, tl in enumerate(terlambat, 1):
                     f.write(f"{i}. ID: {tl.id[:8]}...\n")
-                    f.write(f"   Tindakan     : {tl.tipe_tindakan}\n")
-                    f.write(f"   PJ           : {tl.penanggung_jawab}\n")
-                    f.write(f"   Batas Waktu  : {tl.batas_waktu}\n")
-                    f.write(f"   Status       : {tl.status}\n\n")
+                    f.write(f"   Tindakan         : {tl.tipe_tindakan}\n")
+                    f.write(f"   Penanggung Jawab : {tl.penanggung_jawab}\n")
+                    f.write(f"   Batas Waktu      : {tl.batas_waktu}\n")
+                    f.write(f"   Status           : {tl.status}\n\n")
                 f.write(f"Total: {len(terlambat)} tindak lanjut terlambat\n")
         except OSError as e:
             raise GagalSimpanError(nama_file, str(e))

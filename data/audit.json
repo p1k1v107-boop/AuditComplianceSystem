@@ -34,5 +34,17 @@
     "auditor_id": "9a662b48-6d1f-41ba-8b2b-f6c3b6533cb0",
     "tujuan": "Menilai penerapan kebijakan keamanan informasi",
     "status": "Pelaksanaan"
+  },
+  {
+    "id": "69d08138-27c8-40fd-a955-58b18f12734f",
+    "created_at": "2026-07-31T02:16:51.268545",
+    "updated_at": "2026-07-31T02:16:51.268564",
+    "nama": "Audit Kelayakan Rumah",
+    "periode_mulai": "2026-07-31",
+    "periode_selesai": "2027-08-01",
+    "unit_kerja_id": "9b63c353-c3c7-483f-87a9-b150e2f04109",
+    "auditor_id": "d1209e7f-e124-41ef-8443-864568689cfe",
+    "tujuan": "Menghilangkan kos tidak layak huni\r\n",
+    "status": "Pelaksanaan"
   }
 ]

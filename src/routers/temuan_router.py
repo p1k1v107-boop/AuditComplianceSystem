@@ -1,8 +1,11 @@
 """Router untuk temuan dan bukti audit."""
 
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+import os
+import shutil
+import uuid
 from src.services.temuan_service import TemuanService
 from src.services.audit_service import AuditService
 from src.services.tindak_lanjut_service import TindakLanjutService
@@ -212,8 +215,21 @@ async def tambah_bukti(
     judul: str = Form(...),
     tipe: str = Form(...),
     deskripsi: str = Form(""),
-    lokasi_file: str = Form(""),
+    file: UploadFile = File(None),
 ):
+    lokasi_file = ""
+    # Jika ada file yang di-upload, simpan secara fisik
+    if file and file.filename:
+        upload_dir = os.path.join("data", "uploads")
+        os.makedirs(upload_dir, exist_ok=True)
+        # Buat nama file unik agar tidak bertabrakan
+        ekstensi = os.path.splitext(file.filename)[1]
+        nama_unik = f"{uuid.uuid4().hex}{ekstensi}"
+        path_simpan = os.path.join(upload_dir, nama_unik)
+        with open(path_simpan, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        # Simpan lokasi relatif yang bisa diakses dari browser
+        lokasi_file = f"/uploads/{nama_unik}"
     try:
         svc.tambah_bukti({
             "temuan_id": temuan_id,
