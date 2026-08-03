@@ -1,0 +1,2 @@
+id,temuan_id,unit_kerja_id,tipe_tindakan,deskripsi,penanggung_jawab,batas_waktu,tanggal_pelaksanaan,status,catatan,riwayat,created_at,updated_at
+tl1,t1,u1,Koreksi,Test TL,A,2026-07-30,,Dalam Proses,,[],,
