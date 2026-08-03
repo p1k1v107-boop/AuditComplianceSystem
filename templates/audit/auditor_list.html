@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Daftar Auditor - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><h2>Daftar Auditor</h2><p class="text-muted">Kelola data auditor</p></div>
+    <a href="/audit/auditor/tambah" class="btn btn-primary" id="btnTambahAuditor">+ Tambah Auditor</a>
+</div>
+<div class="card">
+    <div class="card-body p0">
+        {% if auditor_list %}
+        <table class="table">
+            <thead><tr><th>Nama</th><th>Jabatan</th><th>Sertifikasi</th><th>Aksi</th></tr></thead>
+            <tbody>
+                {% for a in auditor_list %}
+                <tr>
+                    <td class="fw-medium">{{ a.nama }}</td>
+                    <td>{{ a.jabatan }}</td>
+                    <td class="text-muted">{{ a.sertifikasi or '-' }}</td>
+                    <td>
+                        <form method="post" action="/audit/auditor/{{ a.id }}/hapus" onsubmit="return confirm('Hapus auditor ini?')" style="display:inline">
+                            <button type="submit" class="btn btn-xs btn-danger" id="btnHapusAuditor{{ loop.index }}">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state-lg"><p>Belum ada auditor. <a href="/audit/auditor/tambah" class="link">Tambah sekarang</a></p></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

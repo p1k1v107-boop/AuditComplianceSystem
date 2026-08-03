@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Daftar Unit Kerja - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><h2>Daftar Unit Kerja</h2><p class="text-muted">Kelola data unit kerja yang diaudit</p></div>
+    <a href="/audit/unit/tambah" class="btn btn-primary" id="btnTambahUnit">+ Tambah Unit</a>
+</div>
+<div class="card">
+    <div class="card-body p0">
+        {% if unit_list %}
+        <table class="table">
+            <thead><tr><th>Kode</th><th>Nama Unit</th><th>Kepala Unit</th><th>Aksi</th></tr></thead>
+            <tbody>
+                {% for u in unit_list %}
+                <tr>
+                    <td><span class="badge badge-blue">{{ u.kode }}</span></td>
+                    <td class="fw-medium">{{ u.nama }}</td>
+                    <td>{{ u.kepala_unit or '-' }}</td>
+                    <td>
+                        <form method="post" action="/audit/unit/{{ u.id }}/hapus" onsubmit="return confirm('Hapus unit ini?')" style="display:inline">
+                            <button type="submit" class="btn btn-xs btn-danger" id="btnHapusUnit{{ loop.index }}">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state-lg"><p>Belum ada unit kerja. <a href="/audit/unit/tambah" class="link">Tambah sekarang</a></p></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

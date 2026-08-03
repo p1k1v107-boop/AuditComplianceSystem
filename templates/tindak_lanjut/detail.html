@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Detail Tindak Lanjut - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="/tindak-lanjut" class="btn btn-ghost btn-sm mb-2">← Kembali</a>
+        <h2>Detail Tindak Lanjut</h2>
+    </div>
+    <form method="post" action="/tindak-lanjut/{{ tl.id }}/hapus" onsubmit="return confirm('Hapus tindak lanjut ini?')">
+        <button type="submit" class="btn btn-danger" id="btnHapusDetailTL">Hapus</button>
+    </form>
+</div>
+<div class="two-col">
+    <div class="card" id="cardDetailTL">
+        <div class="card-header"><h3 class="card-title">Informasi Tindak Lanjut</h3></div>
+        <div class="card-body">
+            <dl class="detail-list">
+                <dt>Status</dt><dd><span class="badge badge-tl-{{ tl.status|lower|replace(' ', '-') }}">{{ tl.status }}</span></dd>
+                <dt>Tipe</dt><dd><span class="badge badge-tipe">{{ tl.tipe_tindakan }}</span></dd>
+                <dt>Temuan</dt><dd>{{ temuan.judul if temuan else '-' }}</dd>
+                <dt>Unit Kerja</dt><dd>{{ unit.nama if unit else '-' }}</dd>
+                <dt>Penanggung Jawab</dt><dd>{{ tl.penanggung_jawab }}</dd>
+                <dt>Batas Waktu</dt><dd class="{% if tl.status not in ['Selesai','Dibatalkan'] %}text-danger{% endif %}">{{ tl.batas_waktu }}</dd>
+                <dt>Pelaksanaan</dt><dd>{{ tl.tanggal_pelaksanaan or '-' }}</dd>
+                <dt>Catatan</dt><dd>{{ tl.catatan or '-' }}</dd>
+            </dl>
+            <div class="detail-section mt-3">
+                <p class="text-sm text-muted mb-1">Deskripsi Tindakan</p>
+                <p>{{ tl.deskripsi }}</p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <!-- Ubah Status -->
+        {% if tl.status not in ['Selesai', 'Dibatalkan'] %}
+        <div class="card mb-4" id="cardUbahStatusTL">
+            <div class="card-header"><h3 class="card-title">Perbarui Status</h3></div>
+            <div class="card-body">
+                <form method="post" action="/tindak-lanjut/{{ tl.id }}/status" id="formStatusTL">
+                    <div class="form-group">
+                        <label for="status_baru" class="form-label">Status Baru</label>
+                        <select id="status_baru" name="status_baru" class="form-select">
+                            {% for s in ['Belum Mulai', 'Dalam Proses', 'Selesai', 'Terlambat', 'Dibatalkan'] %}
+                            {% if s != tl.status %}
+                            <option value="{{ s }}">{{ s }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="catatan_update" class="form-label">Catatan</label>
+                        <textarea id="catatan_update" name="catatan" class="form-textarea" rows="2" placeholder="Catatan pembaruan..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm" id="btnSimpanStatusTL">Simpan Status</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Riwayat -->
+        <div class="card" id="cardRiwayatTL">
+            <div class="card-header"><h3 class="card-title">Riwayat Perubahan</h3></div>
+            <div class="card-body">
+                {% if tl.riwayat %}
+                <div class="timeline">
+                    {% for r in tl.riwayat %}
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <span class="badge badge-tl-{{ r.dari|lower|replace(' ', '-') }}">{{ r.dari }}</span>
+                            <span class="timeline-arrow">→</span>
+                            <span class="badge badge-tl-{{ r.ke|lower|replace(' ', '-') }}">{{ r.ke }}</span>
+                            <div class="timeline-time text-muted">{{ r.waktu[:16] }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">Belum ada riwayat perubahan</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

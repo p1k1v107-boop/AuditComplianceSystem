@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ judul_halaman }} - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><a href="/temuan" class="btn btn-ghost btn-sm mb-2">← Kembali</a><h2>{{ judul_halaman }}</h2></div>
+</div>
+<div class="card form-card">
+    <div class="card-body">
+        <form method="post" action="{% if temuan %}/temuan/{{ temuan.id }}/edit{% else %}/temuan/tambah{% endif %}" id="formTemuan">
+            <div class="form-grid">
+                {% if not temuan %}
+                <div class="form-group">
+                    <label for="jenis" class="form-label">Jenis Temuan <span class="required">*</span></label>
+                    <select id="jenis" name="jenis" class="form-select" required>
+                        <option value="Minor">Minor</option>
+                        <option value="Mayor">Mayor</option>
+                        <option value="Kritis">Kritis</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="program_audit_id" class="form-label">Program Audit <span class="required">*</span></label>
+                    <select id="program_audit_id" name="program_audit_id" class="form-select" required>
+                        <option value="">-- Pilih Program Audit --</option>
+                        {% for a in audit_list %}
+                        <option value="{{ a.id }}">{{ a.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="unit_kerja_id" class="form-label">Unit Kerja <span class="required">*</span></label>
+                    <select id="unit_kerja_id" name="unit_kerja_id" class="form-select" required>
+                        <option value="">-- Pilih Unit Kerja --</option>
+                        {% for u in unit_list %}
+                        <option value="{{ u.id }}">{{ u.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                <div class="form-group full-width">
+                    <label for="judul" class="form-label">Judul Temuan <span class="required">*</span></label>
+                    <input type="text" id="judul" name="judul" class="form-input" required
+                           value="{{ temuan.judul if temuan else '' }}" placeholder="Deskripsi singkat temuan">
+                </div>
+                <div class="form-group full-width">
+                    <label for="deskripsi" class="form-label">Deskripsi Temuan <span class="required">*</span></label>
+                    <textarea id="deskripsi" name="deskripsi" class="form-textarea" rows="3" required
+                              placeholder="Uraikan detail temuan...">{{ temuan.deskripsi if temuan else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="dampak" class="form-label">Dampak (1-5) <span class="required">*</span></label>
+                    <input type="number" id="dampak" name="dampak" class="form-input" min="1" max="5" required
+                           value="{{ temuan.dampak if temuan else 3 }}">
+                </div>
+                <div class="form-group">
+                    <label for="kemungkinan" class="form-label">Kemungkinan (1-5) <span class="required">*</span></label>
+                    <input type="number" id="kemungkinan" name="kemungkinan" class="form-input" min="1" max="5" required
+                           value="{{ temuan.kemungkinan if temuan else 3 }}">
+                </div>
+                <div class="form-group">
+                    <label for="tingkat_kepatuhan" class="form-label">Tingkat Kepatuhan (0-100%) <span class="required">*</span></label>
+                    <input type="number" id="tingkat_kepatuhan" name="tingkat_kepatuhan" class="form-input" min="0" max="100" required
+                           value="{{ temuan.tingkat_kepatuhan if temuan else 70 }}">
+                </div>
+                <div class="form-group">
+                    <label for="batas_tindak_lanjut" class="form-label">Batas Tindak Lanjut</label>
+                    <input type="date" id="batas_tindak_lanjut" name="batas_tindak_lanjut" class="form-input"
+                           value="{{ temuan.batas_tindak_lanjut if temuan else '' }}">
+                </div>
+                <div class="form-group full-width">
+                    <label for="rekomendasi" class="form-label">Rekomendasi</label>
+                    <textarea id="rekomendasi" name="rekomendasi" class="form-textarea" rows="2"
+                              placeholder="Rekomendasi perbaikan...">{{ temuan.rekomendasi if temuan else '' }}</textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a href="/temuan" class="btn btn-ghost" id="btnBatalTemuan">Batal</a>
+                <button type="submit" class="btn btn-primary" id="btnSimpanTemuan">{{ 'Perbarui' if temuan else 'Simpan' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

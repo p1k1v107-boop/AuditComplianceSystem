@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Daftar Temuan - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><h2>Daftar Temuan Audit</h2><p class="text-muted">Kelola dan pantau semua temuan audit</p></div>
+    <a href="/temuan/tambah" class="btn btn-primary" id="btnTambahTemuan">+ Tambah Temuan</a>
+</div>
+
+<!-- Filter -->
+<div class="filter-bar">
+    <a href="/temuan" class="filter-chip {% if not filter_jenis and not filter_status %}active{% endif %}">Semua</a>
+    <a href="/temuan?jenis=Minor" class="filter-chip filter-chip-green {% if filter_jenis == 'Minor' %}active{% endif %}">Minor</a>
+    <a href="/temuan?jenis=Mayor" class="filter-chip filter-chip-yellow {% if filter_jenis == 'Mayor' %}active{% endif %}">Mayor</a>
+    <a href="/temuan?jenis=Kritis" class="filter-chip filter-chip-red {% if filter_jenis == 'Kritis' %}active{% endif %}">Kritis</a>
+    <span class="filter-sep">|</span>
+    <a href="/temuan?status=Terbuka" class="filter-chip {% if filter_status == 'Terbuka' %}active{% endif %}">Terbuka</a>
+    <a href="/temuan?status=Dalam Proses" class="filter-chip {% if filter_status == 'Dalam Proses' %}active{% endif %}">Dalam Proses</a>
+    <a href="/temuan?status=Ditutup" class="filter-chip {% if filter_status == 'Ditutup' %}active{% endif %}">Ditutup</a>
+</div>
+
+<div class="card">
+    <div class="card-body p0">
+        {% if temuan_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Judul Temuan</th>
+                    <th>Jenis</th>
+                    <th>Unit Kerja</th>
+                    <th>Skor Risiko</th>
+                    <th>Status</th>
+                    <th>Batas TL</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in temuan_list %}
+                <tr>
+                    <td><a href="/temuan/{{ t.id }}" class="link fw-medium">{{ t.judul[:45] }}{% if t.judul|length > 45 %}...{% endif %}</a></td>
+                    <td><span class="badge badge-{{ t.JENIS|lower }}">{{ t.JENIS }}</span></td>
+                    <td class="text-muted">{{ unit_map.get(t.unit_kerja_id, '-') }}</td>
+                    <td>
+                        <div class="skor-wrap">
+                            <span class="skor-num">{{ t.hitung_skor_risiko() }}</span>
+                            <span class="risk-label risk-{{ t.label_risiko()|lower|replace(' ', '-') }}">{{ t.label_risiko() }}</span>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-tl-{{ t.status_tindak_lanjut|lower|replace(' ', '-') }}">{{ t.status_tindak_lanjut }}</span></td>
+                    <td class="text-muted">{{ t.batas_tindak_lanjut or '-' }}</td>
+                    <td>
+                        <div class="action-group">
+                            <a href="/temuan/{{ t.id }}" class="btn btn-xs btn-ghost" id="btnDetailTemuan{{ loop.index }}">Detail</a>
+                            <a href="/temuan/{{ t.id }}/edit" class="btn btn-xs btn-outline" id="btnEditTemuan{{ loop.index }}">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Tidak ada temuan. <a href="/temuan/tambah" class="link">Tambah sekarang</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

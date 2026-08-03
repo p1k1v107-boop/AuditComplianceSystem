@@ -1,0 +1,26 @@
+# Environments
+venv/
+.venv/
+env/
+.env
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Testing
+.pytest_cache/
+data_test/
+
+# Runtime data yang dibuat otomatis aplikasi
+data/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Runtime Uploads & Generated Reports
+data/uploads/
+data/laporan/

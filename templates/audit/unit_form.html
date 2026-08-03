@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Tambah Unit Kerja - Sistem Audit{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div><a href="/audit/unit/daftar" class="btn btn-ghost btn-sm mb-2">← Kembali</a><h2>Tambah Unit Kerja</h2></div>
+</div>
+<div class="card form-card">
+    <div class="card-body">
+        <form method="post" action="/audit/unit/tambah" id="formUnit">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="kode" class="form-label">Kode Unit <span class="required">*</span></label>
+                    <input type="text" id="kode" name="kode" class="form-input" required placeholder="Contoh: DIV-KEU">
+                </div>
+                <div class="form-group">
+                    <label for="nama" class="form-label">Nama Unit <span class="required">*</span></label>
+                    <input type="text" id="nama" name="nama" class="form-input" required placeholder="Contoh: Divisi Keuangan">
+                </div>
+                <div class="form-group full-width">
+                    <label for="kepala_unit" class="form-label">Kepala Unit</label>
+                    <input type="text" id="kepala_unit" name="kepala_unit" class="form-input" placeholder="Nama kepala unit">
+                </div>
+            </div>
+            <div class="form-actions">
+                <a href="/audit/unit/daftar" class="btn btn-ghost">Batal</a>
+                <button type="submit" class="btn btn-primary" id="btnSimpanUnit">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
